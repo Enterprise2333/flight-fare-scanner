@@ -1,0 +1,254 @@
+{
+  "meta": { "count": 3 },
+  "data": [
+    {
+      "type": "flight-offer",
+      "id": "1",
+      "source": "GDS",
+      "oneWay": false,
+      "lastTicketingDate": "2026-09-20",
+      "numberOfBookableSeats": 5,
+      "itineraries": [
+        {
+          "duration": "PT12H35M",
+          "segments": [
+            {
+              "id": "1",
+              "departure": { "iataCode": "PVG", "at": "2026-10-01T09:15:00" },
+              "arrival": { "iataCode": "HKG", "at": "2026-10-01T12:20:00" },
+              "carrierCode": "CX",
+              "number": "365",
+              "aircraft": { "code": "333" },
+              "operating": { "carrierCode": "CX" },
+              "duration": "PT3H5M",
+              "numberOfStops": 0
+            },
+            {
+              "id": "2",
+              "departure": { "iataCode": "HKG", "at": "2026-10-01T18:40:00" },
+              "arrival": { "iataCode": "BKK", "at": "2026-10-01T20:50:00" },
+              "carrierCode": "CX",
+              "number": "703",
+              "aircraft": { "code": "32N" },
+              "operating": { "carrierCode": "CX" },
+              "duration": "PT2H10M",
+              "numberOfStops": 0
+            }
+          ]
+        },
+        {
+          "duration": "PT9H05M",
+          "segments": [
+            {
+              "id": "3",
+              "departure": { "iataCode": "BKK", "at": "2026-10-08T10:30:00" },
+              "arrival": { "iataCode": "HKG", "at": "2026-10-08T14:10:00" },
+              "carrierCode": "CX",
+              "number": "700",
+              "aircraft": { "code": "32N" },
+              "operating": { "carrierCode": "CX" },
+              "duration": "PT2H40M",
+              "numberOfStops": 0
+            },
+            {
+              "id": "4",
+              "departure": { "iataCode": "HKG", "at": "2026-10-08T16:05:00" },
+              "arrival": { "iataCode": "PVG", "at": "2026-10-08T19:35:00" },
+              "carrierCode": "CX",
+              "number": "366",
+              "aircraft": { "code": "333" },
+              "operating": { "carrierCode": "CX" },
+              "duration": "PT2H30M",
+              "numberOfStops": 0
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "CNY",
+        "total": "2480.00",
+        "base": "1900.00",
+        "grandTotal": "2480.00"
+      },
+      "pricingOptions": { "fareType": ["PUBLISHED"], "includedCheckedBagsOnly": true },
+      "validatingAirlineCodes": ["CX"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": { "currency": "CNY", "total": "2480.00", "base": "1900.00" },
+          "fareDetailsBySegment": [
+            { "segmentId": "1", "cabin": "ECONOMY", "class": "N",
+              "includedCheckedBags": { "quantity": 1 } },
+            { "segmentId": "2", "cabin": "ECONOMY", "class": "N",
+              "includedCheckedBags": { "quantity": 1 } },
+            { "segmentId": "3", "cabin": "ECONOMY", "class": "N",
+              "includedCheckedBags": { "quantity": 1 } },
+            { "segmentId": "4", "cabin": "ECONOMY", "class": "N",
+              "includedCheckedBags": { "quantity": 1 } }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "2",
+      "source": "GDS",
+      "oneWay": false,
+      "lastTicketingDate": "2026-09-15",
+      "numberOfBookableSeats": 2,
+      "itineraries": [
+        {
+          "duration": "PT22H10M",
+          "segments": [
+            {
+              "id": "1",
+              "departure": { "iataCode": "PVG", "at": "2026-10-01T08:00:00" },
+              "arrival": { "iataCode": "KUL", "at": "2026-10-01T14:30:00" },
+              "carrierCode": "AK",
+              "number": "121",
+              "aircraft": { "code": "320" },
+              "operating": { "carrierCode": "AK" },
+              "duration": "PT6H30M",
+              "numberOfStops": 0
+            },
+            {
+              "id": "2",
+              "departure": { "iataCode": "KUL", "at": "2026-10-01T22:15:00" },
+              "arrival": { "iataCode": "SIN", "at": "2026-10-01T23:20:00" },
+              "carrierCode": "AK",
+              "number": "708",
+              "aircraft": { "code": "320" },
+              "operating": { "carrierCode": "AK" },
+              "duration": "PT1H5M",
+              "numberOfStops": 0
+            },
+            {
+              "id": "3",
+              "departure": { "iataCode": "SIN", "at": "2026-10-02T04:20:00" },
+              "arrival": { "iataCode": "BKK", "at": "2026-10-02T06:10:00" },
+              "carrierCode": "FD",
+              "number": "396",
+              "aircraft": { "code": "320" },
+              "operating": { "carrierCode": "FD" },
+              "duration": "PT1H50M",
+              "numberOfStops": 0
+            }
+          ]
+        },
+        {
+          "duration": "PT8H40M",
+          "segments": [
+            {
+              "id": "4",
+              "departure": { "iataCode": "BKK", "at": "2026-10-08T07:10:00" },
+              "arrival": { "iataCode": "PVG", "at": "2026-10-08T15:50:00" },
+              "carrierCode": "FD",
+              "number": "888",
+              "aircraft": { "code": "321" },
+              "operating": { "carrierCode": "FD" },
+              "duration": "PT4H40M",
+              "numberOfStops": 1
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "CNY",
+        "total": "1620.00",
+        "base": "1180.00",
+        "grandTotal": "1620.00"
+      },
+      "pricingOptions": { "fareType": ["PUBLISHED"], "includedCheckedBagsOnly": false },
+      "validatingAirlineCodes": ["AK"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": { "currency": "CNY", "total": "1620.00", "base": "1180.00" },
+          "fareDetailsBySegment": [
+            { "segmentId": "1", "cabin": "ECONOMY", "class": "Y",
+              "includedCheckedBags": { "quantity": 0 } },
+            { "segmentId": "2", "cabin": "ECONOMY", "class": "Y",
+              "includedCheckedBags": { "quantity": 0 } },
+            { "segmentId": "3", "cabin": "ECONOMY", "class": "Y",
+              "includedCheckedBags": { "quantity": 0 } },
+            { "segmentId": "4", "cabin": "ECONOMY", "class": "Y",
+              "includedCheckedBags": { "quantity": 0 } }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "3",
+      "source": "GDS",
+      "oneWay": false,
+      "lastTicketingDate": "2026-09-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT4H35M",
+          "segments": [
+            {
+              "id": "1",
+              "departure": { "iataCode": "PVG", "at": "2026-10-01T13:40:00" },
+              "arrival": { "iataCode": "BKK", "at": "2026-10-01T17:15:00" },
+              "carrierCode": "MU",
+              "number": "541",
+              "aircraft": { "code": "789" },
+              "operating": { "carrierCode": "MU" },
+              "duration": "PT4H35M",
+              "numberOfStops": 0
+            }
+          ]
+        },
+        {
+          "duration": "PT4H20M",
+          "segments": [
+            {
+              "id": "2",
+              "departure": { "iataCode": "BKK", "at": "2026-10-08T18:30:00" },
+              "arrival": { "iataCode": "PVG", "at": "2026-10-08T23:50:00" },
+              "carrierCode": "MU",
+              "number": "542",
+              "aircraft": { "code": "789" },
+              "operating": { "carrierCode": "MU" },
+              "duration": "PT4H20M",
+              "numberOfStops": 0
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "CNY",
+        "total": "3150.00",
+        "base": "2600.00",
+        "grandTotal": "3150.00"
+      },
+      "pricingOptions": { "fareType": ["PUBLISHED"], "includedCheckedBagsOnly": true },
+      "validatingAirlineCodes": ["MU"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": { "currency": "CNY", "total": "3150.00", "base": "2600.00" },
+          "fareDetailsBySegment": [
+            { "segmentId": "1", "cabin": "ECONOMY", "class": "M",
+              "includedCheckedBags": { "quantity": 2 } },
+            { "segmentId": "2", "cabin": "ECONOMY", "class": "M",
+              "includedCheckedBags": { "quantity": 2 } }
+          ]
+        }
+      ]
+    }
+  ],
+  "dictionaries": {
+    "carriers": { "CX": "CATHAY PACIFIC", "AK": "AIRASIA", "FD": "THAI AIRASIA",
+                  "MU": "CHINA EASTERN" },
+    "currencies": { "CNY": "CHINESE YUAN RENMINBI" }
+  }
+}

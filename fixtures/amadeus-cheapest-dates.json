@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "currency": "CNY",
+    "links": {
+      "self": "https://test.api.amadeus.com/v1/shopping/flight-dates?origin=HKG&destination=LON&departureDate=2026-12-01,2027-01-31&oneWay=false&duration=7&nonStop=false&viewBy=DURATION"
+    },
+    "defaults": {
+      "departureDate": "2026-12-01,2027-01-31",
+      "oneWay": false,
+      "duration": "7",
+      "nonStop": false,
+      "viewBy": "DURATION"
+    }
+  },
+  "data": [
+    { "type": "flight-date", "origin": "HKG", "destination": "LON",
+      "departureDate": "2027-01-19", "returnDate": "2027-01-26",
+      "price": { "total": "4180.00" },
+      "links": { "flightOffers": "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=HKG&destinationLocationCode=LON&departureDate=2027-01-19&returnDate=2027-01-26&adults=1" } },
+    { "type": "flight-date", "origin": "HKG", "destination": "LON",
+      "departureDate": "2027-01-12", "returnDate": "2027-01-19",
+      "price": { "total": "4325.00" },
+      "links": { "flightOffers": "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=HKG&destinationLocationCode=LON&departureDate=2027-01-12&returnDate=2027-01-19&adults=1" } },
+    { "type": "flight-date", "origin": "HKG", "destination": "LON",
+      "departureDate": "2026-12-02", "returnDate": "2026-12-09",
+      "price": { "total": "4690.00" },
+      "links": { "flightOffers": "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=HKG&destinationLocationCode=LON&departureDate=2026-12-02&returnDate=2026-12-09&adults=1" } },
+    { "type": "flight-date", "origin": "HKG", "destination": "LON",
+      "departureDate": "2026-12-19", "returnDate": "2026-12-26",
+      "price": { "total": "8940.00" },
+      "links": { "flightOffers": "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=HKG&destinationLocationCode=LON&departureDate=2026-12-19&returnDate=2026-12-26&adults=1" } }
+  ],
+  "dictionaries": {
+    "currencies": { "CNY": "CHINESE YUAN RENMINBI" },
+    "locations": {
+      "HKG": { "subType": "AIRPORT", "detailedName": "HONG KONG INTL" },
+      "LON": { "subType": "CITY", "detailedName": "LONDON" }
+    }
+  },
+  "warnings": [{ "title": "Maximum response size reached" }]
+}

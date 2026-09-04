@@ -1,0 +1,312 @@
+# Low-fare flight watch configuration.
+# Copy to ~/.flight-fare-scanner/config.yaml and edit.
+# Credentials NEVER live here - they come from environment variables.
+
+state_dir: ~/.flight-fare-scanner      # SQLite history, token cache, reports
+
+# ---------------------------------------------------------------- provider
+# Which backend supplies the fares. Run `fare_watch.py providers --config ...`
+# for the capability matrix. Options differ per backend and unsupported ones
+# are REJECTED, never silently ignored.
+#
+#   google_flights  Google Flights data via SerpApi. Self-serve key, 100 free
+#                   searches/month. Any number of airports per leg, alliance
+#                   filtering, market price level. No forced/banned connection
+#                   point, no +/-3 day window, no refundable filter.
+#   amadeus         GDS data, official API. Forced/banned connection points,
+#                   +/-3 day window, refundable filters, seat counts. Only two
+#                   alternative airports per leg, no alliance filter.
+#
+# Skyscanner is deliberately absent: its Flights API is partner-gated with no
+# self-serve signup, so it cannot be wired up from a personal machine.
+provider:
+  name: google_flights
+  # --- google_flights settings
+  market: us             # gl - affects which fares/currency sources are shown
+  language: en           # hl
+  deep_search: false     # true = matches the website exactly, but slower
+  resolve_return: false  # true = itemise the round-trip return leg
+                         #        (costs one EXTRA API call per watch)
+  # --- amadeus settings (used when name: amadeus)
+  # environment: test    # test | production - must match your key
+  # min_interval_ms: 300
+
+# ---------------------------------------------------------------- defaults
+# Every watch inherits these and may override any of them inline.
+defaults:
+  currency: CNY
+  adults: 1
+  children: 0
+  infants: 0
+  travel_class: null      # ECONOMY | PREMIUM_ECONOMY | BUSINESS | FIRST
+  max_stops: 2            # 0, 1 or 2 - both backends cap connections at 2
+  max_offers: 40
+  # Explicit airline allow-lists are verified locally after the SerpApi response.
+  # Use this for a full-service-only watch; keep every marketing carrier you
+  # accept here. `alliances` remains available but omits independent carriers.
+  # airlines: [CX, BA, VS, LH, LX, AF, KL, AY, QR, EK, EY, TK, SQ, CA, MU, CZ]
+  # exclude_airlines: [XX]        # cannot be combined with airlines/alliances
+  # layover_minutes: [90, 330]    # google_flights only
+  # max_price: 6000
+  # --- amadeus-only options
+  # max_flight_time_pct: 200      # cap detours vs the shortest itinerary
+  # checked_bags_only: true
+  # refundable_only: true
+  # no_penalty_only: true
+
+# ---------------------------------------------------------- traveller / visa
+# Default is a Chinese mainland ordinary passport. A watch may override this
+# using `passport_nationality: CN`. Verified official-source entries can be
+# supplied in visa.entries and are merged into the local cache at run time.
+traveler:
+  passport_nationality: CN
+visa:
+  enabled: true
+  cache_file: ~/.flight-fare-scanner/visa-cache.json
+  cache_max_age_hours: 720
+  # entries:
+  #   - passport_nationality: CN
+  #     country_code: PE
+  #     kind: destination           # destination | transit
+  #     checked_at: 2026-09-01T12:00:00
+  #     source_url: https://official.example/visa
+  #     summary: 官方页面核验后的简要结论；仍须出行前复核
+
+# ------------------------------------------------------------- API budget
+# `validate` multiplies each scheduled watch's worst-case calls by its interval
+# and warns when the combined 30-day estimate exceeds this allowance.
+quota:
+  monthly_limit: 100             # SerpApi free-plan allowance; null disables budget display
+
+# ------------------------------------------------------------ alert rules
+alerting:
+  drop_abs: 300                 # alert when it falls at least this much vs last run
+  drop_pct: 8                   # ...or by at least this percentage
+  alert_on_new_low: true        # alert when it beats the all-time recorded low
+  alert_on_rise_pct: 20         # warn on sharp rises; null to disable
+  quiet_repeat_hours: 6         # suppress the same alert kind at the same price
+  quiet_price_tolerance: 1.0    # "same price" means within this much
+
+# -------------------------------------------------------------- delivery
+# Four independent sinks. console + report are local; email + dingtalk are
+# outbound and are skipped by `run --no-notify`.
+notify:
+
+  # Printed to stdout - this is the default output, and what gets read back
+  # into a conversation. Progress logs go to stderr, so stdout stays clean.
+  console:
+    enabled: true
+    format: markdown       # markdown | text | json  (override: run --format)
+    include_offers: 3      # how many cheapest offers to tabulate per watch
+    only_on_alert: false   # false = always show every watch
+
+  report:
+    enabled: true
+    dir: ~/.flight-fare-scanner/reports
+    include_offers: 10      # PDF tables retain this many cheapest offers
+
+  # Optional email push. Host/port/recipients are plain config; the username
+  # and password come from environment variables only.
+  email:
+    enabled: false
+    host: smtp.gmail.com   # or leave blank and export $SMTP_HOST
+    port: 587              # 587 for starttls, 465 for ssl
+    security: starttls     # starttls | ssl | none
+    user_env: SMTP_USER
+    password_env: SMTP_PASSWORD
+    from: null             # defaults to $SMTP_USER
+    to:
+      - you@example.com
+    subject_prefix: "[Fare watch]"
+    only_on_alert: true    # false = mail every run (override: run --email)
+
+  # Entirely optional; the skill does not depend on it.
+  dingtalk:
+    enabled: false
+    webhook_env: DINGTALK_WEBHOOK
+    secret_env: DINGTALK_SECRET
+    title: Fare watch
+    keyword: null          # required if the robot uses keyword security
+    only_on_alert: true
+    at_mobiles: []
+    at_all: false
+
+# ---------------------------------------------------------------- watches
+watches:
+
+  # 1) Plain round trip - the baseline case.
+  - id: sha-bkk-rt
+    label: 上海 ⇄ 曼谷 往返
+    strategy: roundtrip
+    origin: SHA                  # city code covers PVG + SHA airports
+    destination: BKK
+    depart: 2026-10-01
+    return: 2026-10-08
+    target_price: 1800           # alert whenever it is at or below this
+
+  # 2) WEEKLY SCOUT - scan a two-month window at seven-day anchors. It consumes
+  #    9 API calls/run, or about 39 calls per 30-day month on this schedule.
+  #    The explicit whitelist includes common full-service carriers to Europe,
+  #    including independent carriers QR/EK/EY that alliance filtering misses.
+  - id: hk-prd-lon-scout
+    label: 香港/广州/深圳 ⇄ 伦敦，7 天往返发现（全服务航司）
+    strategy: flex_roundtrip
+    origin: HKG
+    nearby_origins: [CAN, SZX]
+    destination: LHR
+    nearby_destinations: [LGW]  # user-selected nearby destination airport
+    depart_window:
+      from: 2026-12-01
+      to: 2027-01-31
+      step_days: 7                # 9 anchor dates -> 9 API calls
+      max_probes: 12              # guard against accidental quota burn
+    trip_days: 7
+    airlines: [CX, BA, VS, LH, LX, AF, KL, AY, QR, EK, EY, TK, SQ, CA, MU, CZ]
+    max_stops: 1
+    target_price: 5000
+    schedule: { interval: 7d }
+
+  # 3) DAILY FOCUS - takes the newest winning date pair from the scout snapshot
+  #    and checks that exact round trip daily (one API call/run). It can run in
+  #    a separate process; the hand-off is persisted in fares.sqlite3.
+  - id: hk-prd-lon-focus
+    label: 香港/广州/深圳 ⇄ 伦敦，scout 最优日期每日跟踪
+    strategy: focus_roundtrip
+    focus_from: hk-prd-lon-scout
+    origin: HKG
+    nearby_origins: [CAN, SZX]
+    destination: LHR
+    nearby_destinations: [LGW]
+    airlines: [CX, BA, VS, LH, LX, AF, KL, AY, QR, EK, EY, TK, SQ, CA, MU, CZ]
+    max_stops: 1
+    target_price: 5000
+    schedule: { interval: 1d }
+
+  # Combined scheduled estimate: about 69 calls per 30-day month, leaving
+  # roughly 31 calls of the SerpApi free 100-call allowance for manual checks.
+
+  # 4) OPTIONAL HUB OPEN-JAW SCOUT. With no `positioning_hubs`, only the actual
+  #    home_origin is queried. Add ICN (or other confirmed low-fare hubs) only
+  #    when accepting separate-PNR positioning tickets and their extra API cost.
+  #    Each optional hub adds four calls per date anchor.
+  # - id: south-america-hub-scout
+  #   label: 南美开口程：HKG/ICN 枢纽对比
+  #   strategy: hub_open_jaw_scout
+  #   home_origin: HKG
+  #   positioning_hubs: [ICN]  # optional; omit or [] for HKG direct only
+  #   outbound_destination: LIM
+  #   inbound_origin: GIG
+  #   depart_window: { from: 2027-04-01, to: 2027-06-24, step_days: 14, max_probes: 60 }
+  #   trip_days: 27
+  #   positioning: { min_buffer_minutes: 240 }
+  #   airlines: [CX, DL, AA, UA, AC, BA, AF, KL, LH, LX, IB, LA, EK, TK, QR, EY, SQ]
+  #   max_stops: 2
+
+  # 5) DAILY RELATIVE LOW-FARE DISCOVERY. Destination-free: Google Flights Deals
+  #    returns unusually discounted destinations from this user-chosen origin.
+  #    It costs one API call/day when scheduled. Keep commented until you choose
+  #    the origin, date range and journey type; no fixed 800/2000-style price
+  #    threshold is used. `home_country` must match the provider country label.
+  # - id: pvg-relative-roundtrip
+  #   label: 浦东出发的相对低价往返发现
+  #   strategy: low_fare_discovery
+  #   origin: PVG
+  #   nearby_origins: [SHA]
+  #   home_country: China
+  #   discovery_type: roundtrip      # oneway | roundtrip
+  #   outbound_window: { from: 2026-10-01, to: 2026-11-30 }
+  #   trip_length: [5, 9]            # roundtrip only; or travel_duration: 1
+  #   max_deals: 20                  # rank by reported discount %, then price
+  #   max_stops: 1
+  #   schedule: { interval: 1d }     # install only after choosing your values
+  #
+  # - id: pvg-relative-oneway
+  #   label: 浦东出发的相对低价单程发现
+  #   strategy: low_fare_discovery
+  #   origin: PVG
+  #   home_country: China
+  #   discovery_type: oneway
+  #   outbound_window: { from: 2026-10-01, to: 2026-10-31 }
+  #   max_deals: 20
+  #   schedule: { interval: 1d }
+
+  # 5) CHEAPEST-DATE SCAN - the cheap scout. ONE API call returns the cheapest
+  #    departure/return date pairs across the whole window. AMADEUS ONLY, and
+  #    it returns dates + price with no flight numbers, so use it to find the
+  #    good dates and then point a roundtrip watch at them.
+  #    Route coverage is limited; an empty result usually means the route is
+  #    not covered rather than that no fares exist.
+  # - id: hk-lon-amadeus-date-scout
+  #   label: HKG→LON 最便宜日期扫描（单次调用）
+  #   strategy: cheapest_dates
+  #   origin: HKG                 # exactly one origin / one destination
+  #   destination: LON
+  #   depart_window: { from: 2026-12-01, to: 2027-01-31 }
+  #   trip_days: 7
+
+  # 6) Flexible dates + forced/banned connection points.  AMADEUS ONLY, so it
+  #    is commented out while the default provider is google_flights. Switch
+  #    `provider.name: amadeus` and uncomment to use it. google_flights would
+  #    reject these three options rather than silently ignoring them - run
+  #    `validate` to see exactly which watches your backend cannot honour.
+  # - id: pvg-tyo-flex
+  #   label: 浦东 → 东京 单程（±3天浮动，经香港，不经台北）
+  #   strategy: oneway
+  #   origin: PVG
+  #   destination: TYO
+  #   depart: 2026-09-15
+  #   date_window: I3D             # I3D = +/-3 days, P3D = +3, M3D = -3
+  #   via: [HKG]                   # force this connection point (max 2)
+  #   exclude_via: [TPE]           # ban these (max 3)
+  #   max_stops: 1
+
+  # 7) Open-jaw: fly into Paris, fly home out of Rome.
+  - id: eu-open-jaw
+    label: 上海进巴黎 / 罗马出（开口程）
+    strategy: open_jaw
+    outbound:
+      from: PVG
+      to: PAR
+      date: 2026-11-05
+    inbound:
+      from: ROM                  # different city than the outbound arrival
+      to: PVG
+      date: 2026-11-18
+
+  # 8) Multi-city connecting ticket - 2..6 chronological legs on ONE ticket.
+  #    Each leg can independently include nearby_origins/nearby_destinations;
+  #    max_stops still caps connections within each leg at 0/1/2.
+  - id: sea-multi-city
+    label: 东南亚多段联程（4段一票）
+    strategy: multi_city
+    legs:
+      - { from: PVG, to: SIN, date: 2026-12-01 }
+      - { from: SIN, to: DPS, date: 2026-12-05 }
+      - { from: DPS, to: KUL, date: 2026-12-10 }
+      - { from: KUL, to: LHR, nearby_destinations: [LGW], date: 2026-12-15 }
+    max_stops: 2
+
+  # 9) OPEN return proxy: the return date is swept and the cheapest wins.
+  #    Costs one API call per candidate date - mind step_days and the free
+  #    monthly allowance.
+  - id: pvg-lon-open
+    label: 浦东 → 伦敦，回程 OPEN（日期扫描代理）
+    strategy: open_return
+    origin: PVG
+    destination: LON
+    depart: 2026-09-20
+    return_window:
+      from: 2026-10-05
+      to: 2026-10-20
+      step_days: 3               # 6 dates -> 6 API calls
+      max_probes: 12             # guard against accidental quota burn
+
+  # 10) Split ticket / self-transfer: two separate tickets, prices are SUMMED.
+  #    Read the risk note this strategy prints before booking.
+  - id: pvg-nyc-split
+    label: 浦东 → 首尔 → 纽约（拆票自转）
+    strategy: split_ticket
+    legs:
+      - { from: PVG, to: ICN, date: 2026-10-02 }
+      - { from: ICN, to: NYC, date: 2026-10-03 }   # overnight buffer on purpose
+    target_price: 4200

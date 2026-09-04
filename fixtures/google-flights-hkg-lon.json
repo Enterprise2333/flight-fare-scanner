@@ -1,0 +1,159 @@
+{
+  "search_metadata": { "status": "Success" },
+  "search_parameters": {
+    "engine": "google_flights",
+    "departure_id": "HKG,CAN,SZX",
+    "arrival_id": "LHR,LGW",
+    "outbound_date": "2026-12-10",
+    "return_date": "2027-01-08",
+    "currency": "CNY",
+    "type": "1"
+  },
+  "best_flights": [
+    {
+      "flights": [
+        {
+          "departure_airport": { "name": "Hong Kong International Airport", "id": "HKG", "time": "2026-12-10 23:55" },
+          "arrival_airport": { "name": "Heathrow Airport", "id": "LHR", "time": "2026-12-11 05:40" },
+          "duration": 825,
+          "airplane": "Airbus A350",
+          "airline": "Cathay Pacific",
+          "travel_class": "Economy",
+          "flight_number": "CX 251",
+          "legroom": "32 in",
+          "extensions": ["Average legroom (32 in)", "In-seat power outlet"]
+        }
+      ],
+      "layovers": [],
+      "total_duration": 825,
+      "carbon_emissions": { "this_flight": 812000, "typical_for_this_route": 799000, "difference_percent": 2 },
+      "price": 5480,
+      "type": "Round trip",
+      "extensions": ["1 checked bag included"],
+      "departure_token": "TOKEN_CX_NONSTOP",
+      "booking_token": "BOOK_CX"
+    },
+    {
+      "flights": [
+        {
+          "departure_airport": { "name": "Guangzhou Baiyun International Airport", "id": "CAN", "time": "2026-12-10 01:05" },
+          "arrival_airport": { "name": "Doha Hamad International Airport", "id": "DOH", "time": "2026-12-10 05:35" },
+          "duration": 570,
+          "airplane": "Boeing 777",
+          "airline": "Qatar Airways",
+          "travel_class": "Economy",
+          "flight_number": "QR 877",
+          "extensions": ["Above average legroom (34 in)"]
+        },
+        {
+          "departure_airport": { "name": "Doha Hamad International Airport", "id": "DOH", "time": "2026-12-10 07:55" },
+          "arrival_airport": { "name": "Heathrow Airport", "id": "LHR", "time": "2026-12-10 13:20" },
+          "duration": 445,
+          "airplane": "Airbus A350",
+          "airline": "Qatar Airways",
+          "travel_class": "Economy",
+          "flight_number": "QR 3",
+          "extensions": ["Above average legroom (34 in)"]
+        }
+      ],
+      "layovers": [
+        { "duration": 140, "name": "Doha Hamad International Airport", "id": "DOH" }
+      ],
+      "total_duration": 1155,
+      "carbon_emissions": { "this_flight": 934000, "typical_for_this_route": 799000, "difference_percent": 17 },
+      "price": 4860,
+      "type": "Round trip",
+      "extensions": ["2 checked bags included"],
+      "departure_token": "TOKEN_QR_DOH",
+      "booking_token": "BOOK_QR"
+    }
+  ],
+  "other_flights": [
+    {
+      "flights": [
+        {
+          "departure_airport": { "name": "Shenzhen Bao'an International Airport", "id": "SZX", "time": "2026-12-10 08:40" },
+          "arrival_airport": { "name": "Beijing Capital International Airport", "id": "PEK", "time": "2026-12-10 12:05" },
+          "duration": 205,
+          "airplane": "Airbus A330",
+          "airline": "Air China",
+          "travel_class": "Economy",
+          "flight_number": "CA 1332",
+          "extensions": ["Below average legroom (30 in)"]
+        },
+        {
+          "departure_airport": { "name": "Beijing Capital International Airport", "id": "PEK", "time": "2026-12-10 14:30" },
+          "arrival_airport": { "name": "Heathrow Airport", "id": "LHR", "time": "2026-12-10 18:15" },
+          "duration": 645,
+          "airplane": "Boeing 747",
+          "airline": "Air China",
+          "travel_class": "Economy",
+          "flight_number": "CA 937",
+          "extensions": ["Below average legroom (30 in)"]
+        }
+      ],
+      "layovers": [
+        { "duration": 145, "name": "Beijing Capital International Airport", "id": "PEK" }
+      ],
+      "total_duration": 995,
+      "carbon_emissions": { "this_flight": 1054000, "typical_for_this_route": 799000, "difference_percent": 32 },
+      "price": 5120,
+      "type": "Round trip",
+      "extensions": ["1 checked bag included"],
+      "departure_token": "TOKEN_CA_PEK",
+      "booking_token": "BOOK_CA"
+    },
+    {
+      "flights": [
+        {
+          "departure_airport": { "name": "Hong Kong International Airport", "id": "HKG", "time": "2026-12-10 20:15" },
+          "arrival_airport": { "name": "Singapore Changi Airport", "id": "SIN", "time": "2026-12-11 00:05" },
+          "duration": 230,
+          "airplane": "Boeing 787",
+          "airline": "Singapore Airlines",
+          "travel_class": "Economy",
+          "flight_number": "SQ 895",
+          "extensions": ["Average legroom (32 in)"]
+        },
+        {
+          "departure_airport": { "name": "Singapore Changi Airport", "id": "SIN", "time": "2026-12-11 02:10" },
+          "arrival_airport": { "name": "Heathrow Airport", "id": "LHR", "time": "2026-12-11 08:50" },
+          "duration": 820,
+          "airplane": "Airbus A350",
+          "airline": "Singapore Airlines",
+          "travel_class": "Economy",
+          "flight_number": "SQ 322",
+          "extensions": ["Average legroom (32 in)"]
+        }
+      ],
+      "layovers": [
+        { "duration": 125, "name": "Singapore Changi Airport", "id": "SIN" }
+      ],
+      "total_duration": 1175,
+      "carbon_emissions": { "this_flight": 1120000, "typical_for_this_route": 799000, "difference_percent": 40 },
+      "price": 6240,
+      "type": "Round trip",
+      "extensions": ["1 checked bag included"],
+      "departure_token": "TOKEN_SQ_SIN",
+      "booking_token": "BOOK_SQ"
+    }
+  ],
+  "price_insights": {
+    "lowest_price": 4860,
+    "price_level": "typical",
+    "typical_price_range": [4600, 6800],
+    "price_history": [[1765324800, 5100], [1765411200, 4980]]
+  },
+  "airports": [
+    {
+      "departure": [
+        { "airport": { "id": "HKG", "name": "Hong Kong International Airport" }, "city": "Hong Kong", "country": "Hong Kong", "country_code": "HK" },
+        { "airport": { "id": "CAN", "name": "Guangzhou Baiyun International Airport" }, "city": "Guangzhou", "country": "China", "country_code": "CN" },
+        { "airport": { "id": "SZX", "name": "Shenzhen Bao'an International Airport" }, "city": "Shenzhen", "country": "China", "country_code": "CN" }
+      ],
+      "arrival": [
+        { "airport": { "id": "LHR", "name": "Heathrow Airport" }, "city": "London", "country": "United Kingdom", "country_code": "GB" }
+      ]
+    }
+  ]
+}

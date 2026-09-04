@@ -1,0 +1,28 @@
+# Runtime state: never commit fares, reports, token caches, or user settings
+.flight-fare-scanner/
+fares.sqlite3
+reports/
+*.log
+.token.json
+visa-cache.json
+
+# Credentials: commit only credentials.env.example
+credentials.env
+.env
+.env.*
+!.env.example
+
+# Local configuration: commit only config.example.yaml
+config.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+
+# OS and IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

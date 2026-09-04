@@ -1,0 +1,64 @@
+{
+  "departure_informations": {
+    "airport_name": "Shanghai Pudong International Airport",
+    "airport_code": "PVG",
+    "city": "Shanghai",
+    "country": "China"
+  },
+  "deals": [
+    {
+      "destination_id": "/m/domestic",
+      "name": "Chengdu",
+      "country": "China",
+      "price": 620,
+      "average_price": 1580,
+      "discount_percentage": 61,
+      "flight_link": "https://example.invalid/pvg-ctu",
+      "serpapi_flight_link": "https://example.invalid/serpapi-pvg-ctu",
+      "start_date": "2026-10-10",
+      "end_date": "2026-10-17",
+      "departure_airport_code": "PVG",
+      "arrival_airport_code": "CTU",
+      "flight_duration": 210,
+      "stops": 0,
+      "airline": "China Eastern",
+      "airline_code": "MU"
+    },
+    {
+      "destination_id": "/m/international",
+      "name": "Kuala Lumpur",
+      "country": "Malaysia",
+      "price": 1100,
+      "average_price": 2600,
+      "discount_percentage": 58,
+      "flight_link": "https://example.invalid/pvg-kul",
+      "serpapi_flight_link": "https://example.invalid/serpapi-pvg-kul",
+      "start_date": "2026-10-15",
+      "end_date": "2026-10-22",
+      "departure_airport_code": "PVG",
+      "arrival_airport_code": "KUL",
+      "flight_duration": 330,
+      "stops": 0,
+      "airline": "AirAsia X",
+      "airline_code": "D7"
+    },
+    {
+      "destination_id": "/m/relative",
+      "name": "Hanoi",
+      "country": "Vietnam",
+      "price": 780,
+      "average_price": 1200,
+      "discount_percentage": 35,
+      "flight_link": "https://example.invalid/pvg-han",
+      "serpapi_flight_link": "https://example.invalid/serpapi-pvg-han",
+      "start_date": "2026-10-20",
+      "end_date": "2026-10-27",
+      "departure_airport_code": "PVG",
+      "arrival_airport_code": "HAN",
+      "flight_duration": 260,
+      "stops": 1,
+      "airline": "Vietnam Airlines",
+      "airline_code": "VN"
+    }
+  ]
+}

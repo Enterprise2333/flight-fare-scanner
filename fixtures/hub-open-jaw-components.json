@@ -1,0 +1,54 @@
+{
+  "hub_responses": {
+    "HKG>LIM|GIG>HKG": {
+      "best_flights": [{
+        "flights": [{
+          "departure_airport": {"id": "HKG", "time": "2027-04-01 09:00"},
+          "arrival_airport": {"id": "LIM", "time": "2027-04-02 08:00"},
+          "duration": 1380, "airline": "Example Direct", "flight_number": "XD 100",
+          "travel_class": "Economy"
+        }], "layovers": [], "total_duration": 1380, "price": 13000, "type": "Multi-city"
+      }]
+    },
+    "HKG>ICN": {
+      "best_flights": [{
+        "flights": [{
+          "departure_airport": {"id": "HKG", "time": "2027-04-01 08:00"},
+          "arrival_airport": {"id": "ICN", "time": "2027-04-01 12:00"},
+          "duration": 240, "airline": "Example Position", "flight_number": "XP 101",
+          "travel_class": "Economy"
+        }], "layovers": [], "total_duration": 240, "price": 1000, "type": "One way"
+      }]
+    },
+    "ICN>LIM": {
+      "best_flights": [{
+        "flights": [{
+          "departure_airport": {"id": "ICN", "time": "2027-04-01 16:00"},
+          "arrival_airport": {"id": "LIM", "time": "2027-04-02 12:00"},
+          "duration": 1200, "airline": "Example Main", "flight_number": "XM 201",
+          "travel_class": "Economy"
+        }], "layovers": [], "total_duration": 1200, "price": 5000, "type": "One way"
+      }]
+    },
+    "GIG>ICN": {
+      "best_flights": [{
+        "flights": [{
+          "departure_airport": {"id": "GIG", "time": "2027-04-28 08:00"},
+          "arrival_airport": {"id": "ICN", "time": "2027-04-28 17:00"},
+          "duration": 1260, "airline": "Example Main", "flight_number": "XM 202",
+          "travel_class": "Economy"
+        }], "layovers": [], "total_duration": 1260, "price": 5000, "type": "One way"
+      }]
+    },
+    "ICN>HKG": {
+      "best_flights": [{
+        "flights": [{
+          "departure_airport": {"id": "ICN", "time": "2027-04-28 21:00"},
+          "arrival_airport": {"id": "HKG", "time": "2027-04-28 23:30"},
+          "duration": 150, "airline": "Example Position", "flight_number": "XP 102",
+          "travel_class": "Economy"
+        }], "layovers": [], "total_duration": 150, "price": 1000, "type": "One way"
+      }]
+    }
+  }
+}
