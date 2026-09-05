@@ -47,7 +47,7 @@ flight-fare-scanner/
 └── watch-<watch-id>.log
 ```
 
-## 安装
+## 在 Codex 中安装
 
 ### 前置条件
 
@@ -59,16 +59,40 @@ flight-fare-scanner/
 python3 -m pip install reportlab
 ```
 
-### 初始化
+### 安装技能与初始化
+
+Codex 会从 `$CODEX_HOME/skills` 发现技能，默认目录为
+`~/.codex/skills`。将本仓库中包含 `SKILL.md` 的目录安装为：
+
+```text
+$CODEX_HOME/skills/flight-fare-scanner/
+```
+
+如果使用 Codex 内置的技能安装器，可从 GitHub 仓库安装包含 `SKILL.md`
+的路径；安装后重新打开或刷新 Codex。
+
+macOS/Linux：
 
 ```bash
-SKILL=~/.qoder/skills/flight-fare-scanner
-STATE=~/.flight-fare-scanner
+CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+SKILL="$CODEX_HOME/skills/flight-fare-scanner"
+STATE="$HOME/.flight-fare-scanner"
 
 mkdir -p "$STATE"
 cp "$SKILL/config.example.yaml" "$STATE/config.yaml"
 cp "$SKILL/credentials.env.example" "$STATE/credentials.env"
 chmod 600 "$STATE/credentials.env" "$STATE/config.yaml"
+```
+
+Windows PowerShell：
+
+```powershell
+$CodexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }
+$Skill = Join-Path $CodexHome 'skills\flight-fare-scanner'
+$State = Join-Path $HOME '.flight-fare-scanner'
+New-Item -ItemType Directory -Force $State | Out-Null
+Copy-Item (Join-Path $Skill 'config.example.yaml') (Join-Path $State 'config.yaml')
+Copy-Item (Join-Path $Skill 'credentials.env.example') (Join-Path $State 'credentials.env')
 ```
 
 ### 配置凭证
@@ -90,11 +114,20 @@ export SERPAPI_KEY="你的 SerpApi Key"
 
 不要把 Key、SMTP 密码或 cookie 写进 `config.yaml`、README、Git 仓库或对话。
 
-加载凭证：
+加载凭证（macOS/Linux）：
 
 ```bash
 source ~/.flight-fare-scanner/credentials.env
 ```
+
+PowerShell 用户请将 `credentials.env.example` 中需要的变量设置到当前
+会话，例如：
+
+```powershell
+$env:SERPAPI_KEY = '你的 SerpApi Key'
+```
+
+不要在 PowerShell 中直接执行含有 `export` 的凭证文件。
 
 ## 开始前的需求确认
 
@@ -141,7 +174,7 @@ Skyscanner 未接入：其 Flights API 是合作伙伴准入模式，无法作�
 ## 首次验证与基本命令
 
 ```bash
-S=~/.qoder/skills/flight-fare-scanner/scripts
+S=$CODEX_HOME/skills/flight-fare-scanner/scripts
 CFG=~/.flight-fare-scanner/config.yaml
 
 # 零调用：校验配置、策略、日期、provider 能力与调用次数
@@ -152,7 +185,7 @@ python3 "$S/fare_watch.py" validate --config "$CFG" --show-body
 
 # 使用 fixture 跑完整离线流程，不消耗 API 额度
 python3 "$S/fare_watch.py" run --config "$CFG" \
-  --mock ~/.qoder/skills/flight-fare-scanner/fixtures/google-flights-hkg-lon.json
+  --mock $CODEX_HOME/skills/flight-fare-scanner/fixtures/google-flights-hkg-lon.json
 
 # 查询指定 watch
 python3 "$S/fare_watch.py" run --config "$CFG" --watch hk-prd-lon-scout
@@ -491,7 +524,7 @@ notify:
 先完成 `validate`，再安装任务。每个 watch 独立调度：
 
 ```bash
-S=~/.qoder/skills/flight-fare-scanner/scripts
+S=$CODEX_HOME/skills/flight-fare-scanner/scripts
 
 # 每周日期发现
 "$S/install_schedule.sh" --watch hk-prd-lon-scout --interval 7d
@@ -585,3 +618,4 @@ python3 "$S/fare_watch.py" run --config "$CFG" --format json 2>/dev/null | jq .
 - [SKILL.md](SKILL.md)：AI 使用时的操作规范与需求澄清流程。
 - [reference.md](reference.md)：provider 参数、能力契约、输出与调度细节。
 - [config.example.yaml](config.example.yaml)：可复制的完整示例。
+

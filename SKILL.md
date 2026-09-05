@@ -119,14 +119,34 @@ questions and stop before calling the provider. A safe question template is:
 After clarification, run `validate --show-body` first. State the resulting API
 call count, then run the real query only when it matches the confirmed scope.
 
-## Setup (one time)
+## Setup in Codex (one time)
+
+This is a Codex skill. Install the directory containing this file at
+`$CODEX_HOME/skills/flight-fare-scanner` (the default is `~/.codex/skills`),
+then restart or refresh Codex so it can discover the skill. If using the
+Codex skill installer, install the repository path that contains `SKILL.md`.
+
+On macOS/Linux:
 
 ```bash
-SKILL=~/.qoder/skills/flight-fare-scanner
-mkdir -p ~/.flight-fare-scanner
-cp $SKILL/config.example.yaml    ~/.flight-fare-scanner/config.yaml
-cp $SKILL/credentials.env.example ~/.flight-fare-scanner/credentials.env
-chmod 600 ~/.flight-fare-scanner/credentials.env
+CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+SKILL="$CODEX_HOME/skills/flight-fare-scanner"
+STATE="$HOME/.flight-fare-scanner"
+mkdir -p "$STATE"
+cp "$SKILL/config.example.yaml" "$STATE/config.yaml"
+cp "$SKILL/credentials.env.example" "$STATE/credentials.env"
+chmod 600 "$STATE/credentials.env" "$STATE/config.yaml"
+```
+
+On Windows PowerShell:
+
+```powershell
+$CodexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }
+$Skill = Join-Path $CodexHome 'skills\flight-fare-scanner'
+$State = Join-Path $HOME '.flight-fare-scanner'
+New-Item -ItemType Directory -Force $State | Out-Null
+Copy-Item (Join-Path $Skill 'config.example.yaml') (Join-Path $State 'config.yaml')
+Copy-Item (Join-Path $Skill 'credentials.env.example') (Join-Path $State 'credentials.env')
 ```
 
 1. **Required** — get a key for whichever backend you chose and put it in
@@ -145,18 +165,21 @@ config file, and never commit either file.
 
 ## Commands
 
-Always `source ~/.flight-fare-scanner/credentials.env` first in an interactive shell.
+In a macOS/Linux shell, always `source ~/.flight-fare-scanner/credentials.env`
+before running a real query. In PowerShell, set the variables from the file in
+the current session; the example file uses POSIX `export` syntax, so do not
+dot-source it directly in PowerShell.
 
 ```bash
 CFG=~/.flight-fare-scanner/config.yaml
-S=~/.qoder/skills/flight-fare-scanner/scripts
+S=$CODEX_HOME/skills/flight-fare-scanner/scripts
 
 # Check config + build every request body. Zero API calls - do this first.
 python3 $S/fare_watch.py validate --config $CFG --show-body
 
 # Exercise the whole pipeline offline, no credentials needed.
 python3 $S/fare_watch.py run --config $CFG \
-    --mock ~/.qoder/skills/flight-fare-scanner/fixtures/sample-offers.json
+    --mock $CODEX_HOME/skills/flight-fare-scanner/fixtures/sample-offers.json
 
 # Real search. Prints a Markdown table of the cheapest offers per watch.
 python3 $S/fare_watch.py run --config $CFG
@@ -220,7 +243,7 @@ and are not removed.
 ## Scheduling
 
 ```bash
-S=~/.qoder/skills/flight-fare-scanner/scripts
+S=$CODEX_HOME/skills/flight-fare-scanner/scripts
 
 # Weekly flexible-date discovery: 9 anchored searches per run.
 $S/install_schedule.sh --watch hk-prd-lon-scout --interval 7d
@@ -461,3 +484,4 @@ spending quota.
 
 For per-backend request/response contracts, error codes and per-sink delivery
 troubleshooting (SMTP and DingTalk), see [reference.md](reference.md).
+
